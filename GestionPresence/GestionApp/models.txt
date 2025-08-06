@@ -1,0 +1,73 @@
+from django.db import models
+
+# Classe Employé
+class Employe(models.Model):
+    nom = models.CharField(max_length=100)
+    email = models.EmailField(unique=True)
+
+    def se_connecter(self):
+        # Logique de connexion ici
+        pass
+
+    def voir_historique(self):
+        # Retourner toutes les présences liées à cet employé
+        return self.presence_set.all()
+
+    def __str__(self):
+        return self.nom
+
+# Classe Présence
+class Presence(models.Model):
+    date = models.DateField()
+    heure_arrivee = models.DateTimeField(null=True, blank=True)
+    heure_sortie = models.DateTimeField(null=True, blank=True)
+    employe = models.ForeignKey(Employe, on_delete=models.CASCADE)
+
+    def enregistrer_arrivee(self):
+        from django.utils import timezone
+        self.heure_arrivee = timezone.now()
+        self.save()
+
+    def enregistrer_sortie(self):
+        from django.utils import timezone
+        self.heure_sortie = timezone.now()
+        self.save()
+
+    def __str__(self):
+        return f"{self.employe.nom} - {self.date}"
+
+# Classe Administrateur (hérite d'Employé)
+class Administrateur(Employe):
+    role = models.CharField(max_length=50)
+
+    def gerer_employes(self):
+        # Logique pour gérer les employés
+        pass
+
+    def voir_rapports(self):
+        return Rapport.objects.all()
+
+# Classe Rapport
+class Rapport(models.Model):
+    TYPE_CHOICES = [
+        (1, 'Journalier'),
+        (2, 'Hebdomadaire'),
+        (3, 'Mensuel'),
+        (4, 'Personnalisé'),
+    ]
+
+    type = models.IntegerField(choices=TYPE_CHOICES)
+    date_debut = models.DateField()
+    date_fin = models.DateField()
+    contenu = models.TextField()
+
+    def generer(self):
+        # Logique de génération du contenu du rapport
+        pass
+
+    def exporter(self, format='pdf'):
+        # Logique d'export selon le format choisi
+        pass
+
+    def __str__(self):
+        return f"Rapport {self.get_type_display()} - {self.date_debut} à {self.date_fin}"

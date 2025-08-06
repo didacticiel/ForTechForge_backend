@@ -1,0 +1,19 @@
+{% load static %}
+<!Doctype html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestion de presence</title>
+    <link rel="stylesheet" href="styles.css">   
+
+</head> 
+<body>
+
+    <h1>Bienvenue dans le système de gestion de présence</h1>
+    <p>Ce système vous permet de gérer les présences des employés, de générer des rapports et de suivre l'historique des connexions.</p>
+    <p>Utilisez le menu pour naviguer entre les différentes fonctionnalités.</p>
+    <a href="{% url 'list_employer' %}">Liste des employés</a>
+            
+
+</body>
